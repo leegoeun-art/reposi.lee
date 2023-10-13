@@ -1,0 +1,28 @@
+#그전꺼 생각 없이 python으로 작성해버렸습니다 ㅠㅠ.
+int isPrime(int num) {
+	if (num <= 1) return 0;
+	if (num <= 3) return 1;
+
+	if (num % 2 == 0) return 0;
+
+	for (int i = 3; i * i <= num; i += 2) {
+		if (num % i == 0) return 0;
+	}
+
+	return 1;
+}
+
+int main() {
+	int num;
+	printf("Please enter a number");
+	scanf_s("%d", &num);
+
+	if (isPrime(num)) {
+		printf("It is a prime number.\n");
+	}
+	else {
+		printf("It is not a prime number.\n");
+
+	}
+	return 0;
+}
