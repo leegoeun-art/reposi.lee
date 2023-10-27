@@ -1,0 +1,44 @@
+#include <stdio.h>
+#include <math.h>
+
+int main(void)
+{
+	int num1, num2;
+
+	printf("두 정수를 입력하세요");
+	scanf_s("%d, %d", &num1, &num2);
+
+#if 1
+	printf("%d & %d = %d \n", num1, num2, num1 & num2);
+	printf("%d | %d = %d \n", num1, num2, num1 | num2);
+	printf("%d ^ %d = %d \n", num1, num2, num1 ^ num2);
+
+#endif
+	printf("%d의 %d승 = %.f \n", num1, num2, pow(num1, num2));
+	//a의 n승 : a^n 이 아닌 include math h 이후 pow (a,n)
+	return 0;
+}
+
+10100
+2^4 2^3 2^2 2^1 2^0
+16+0+4+0+0= 20
+
+10100
+01111
+------ end연산은 둘다 1이어야되니까
+00100 십진수로 4
+
+or 면 둘중에 하나만 1이어도 1이니까
+11111 31 
+
+
+
+
+int main2(void)
+{
+	double km;
+	printf("Please enter kilometers: ");
+	scanf_s("%lf", &km);
+	printf("%.3f km is equal to %.3f miles. \n", km, km / 1.609);
+	return 0;
+}
