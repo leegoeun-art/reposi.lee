@@ -1,0 +1,92 @@
+#include<stdio.h>
+
+int main(void) {
+	int order;
+	char buy = 0, join = 0;
+	double sim = 0, Npay = 0, Nbank = 0, Hyundai = 0, membership = 0;
+	double total, chung = 0;
+	printf("=== 네이버페이 결제 계산 프로그램 ===\n");
+	printf("주문액을 입력하세요:");
+	scanf_s(" %d", &order);
+	while (1) {
+		printf("=== 결제 수단 목록 ===\n");
+		printf("a) NPay머니 네이버통장 충전결제 b)NPay머니 일반 충전결제 c)계좌 간편결제\n d)네이버 현대카드 간편결제 e)청구할인 삼성카드결제 f)일반 카드결제\n");
+		printf("결제 수단을 입력하세요:");
+		scanf_s(" %c", &buy, sizeof(buy));
+		if (buy >= 'a' || buy <= 'f') {
+			break;
+		}
+
+
+		if (buy > 'f' || buy < 'a') {
+			printf("잘못 입력하셨습니다. 재입력 바랍니다\n");
+			printf("결제 수단을 입력하세요:");
+			scanf_s(" %c", &buy);
+		}
+	}
+
+	printf("네이버 멤버십에 가입되어 있나요?(y/n)?");
+	scanf_s(" %c", &join, sizeof(join));
+	if (join == 'Y' || join == 'y') {
+		if (order < 200000) {
+			membership = order * (0.04);
+			if (membership > 20000)
+				membership = 20000;
+		}
+		else if (order >= 200000) {
+			membership = 200000 * (0.04) + (order - 200000) * (0.01);
+			if (membership > 20000)
+				membership = 20000;
+		}
+
+
+	}
+
+	sim = order * (0.01);
+
+	if (buy == 'a') {
+		Npay = order * (0.015);
+		Nbank = order * (0.005);
+	}
+
+	else if (buy == 'b') {
+		Npay = order * (0.015);
+
+	}
+	
+	else if (buy == 'd') {
+		Hyundai = order * (0.05);
+		if (Hyundai > 10000) {
+			Hyundai = 10000;
+		}
+
+	}
+	else if (buy == 'e') {
+		if (order > 50000) {
+			chung = order * (0.05);
+			if (chung > 5000) {
+				chung = 5000;
+			}
+		}
+		else if (buy == 'c' || buy == 'f') {
+			total = sim;
+		}
+	}
+
+	printf("=== 결제 및 적립 내역 ===\n");
+	printf("주문금액 %d원\n", order);
+	if (chung > 0)
+		printf("청구할인 %.0f원\n", chung);
+	printf("기본 적립 %.0f원\n", sim);
+	if (Npay > 0)
+		printf("네이버페이 머니 결제적립 %.0f원\n", Npay);
+	if (Nbank > 0)
+		printf("네이버통장 추가적립 %.0f원\n", Nbank);
+	if (Hyundai > 0)
+		printf("네이버 현대카드 추가적립 %.0f원\n", Hyundai);
+	if (membership > 0)
+		printf("네이버 멤버십 추가적립 %.0f원\n", membership);
+
+	total = sim + Npay + Nbank + Hyundai + membership;
+	printf("총 적립액은 %.0f원입니다", total);
+
