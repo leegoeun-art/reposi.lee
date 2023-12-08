@@ -8,7 +8,7 @@ int main(void)
 	int* ptr2 = &arr2[0];
 	int temp;
 	printf("arr1:");
-	for (int i = 0; i < 6; i++) {
+	for (i = 0; i < 6; i++) {
 		printf("%d ", arr1[i]);
 	}
 	printf("\n");
@@ -25,12 +25,11 @@ int main(void)
 		ptr2++;
 	}
 
-	printf("after swap\n");
 	printf("arr1:");
 	for (int i = 0; i < 6; i++) {
 		printf("%d ", arr1[i]);
 	}
-	printf("\n");
+
 	printf("arr2:");
 	for (int i = 0; i < 6; i++) {
 		printf("%d ", arr2[i]);
