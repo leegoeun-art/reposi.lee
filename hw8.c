@@ -19,35 +19,22 @@ double sqrt(double x); // 루트 x를 반환
 
 double calculateMean(double arr[], int size) {
     double sum = 0.0;
-
-    for (int i = 0; i < size; i++) {
+    int i;
+    for (i = 0; i < size; ++i) {
         sum += arr[i];
     }
-
-    return sum / size;
-}
-
-double calculateStandardDeviation(double arr[], int size) {
-    double mean = calculateMean(arr, size);
-    double sumSquaredDiff = 0.0;
-
-    for (int i = 0; i < size; i++) {
-        sumSquaredDiff += pow(arr[i] - mean, 2);
-    }
-
-    return sqrt(sumSquaredDiff / size);
+    mean = sum / 5;
+    for (i=0; i<5; ++i)
+        sd += pow(data[i] - mean, 2);
+    return sqrt(sd / 5);
 }
 
 int main() {
-    double numbers[5];
-
+    int i;
+    double data[5];
     printf("Enter 5 real numbers: ");
-    for (int i = 0; i < 5; i++) {
+    for (i = 0; i < 5; i++) 
         scanf("%lf", &numbers[i]);
-    }
-
-    double standardDeviation = calculateStandardDeviation(numbers, 5);
-    printf("Standard Deviation = %.3lf\n", standardDeviation);
-
+    printf("\n Standar Deviation = %.3f", calculate_stddev(data));
     return 0;
 }
