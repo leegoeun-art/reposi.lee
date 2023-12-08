@@ -36,7 +36,7 @@ int main() {
     printf("\n");
 
     printf("printing the three cities:\n");
-    for (int i = 0; i < 3; i++) 
+    for (i = 0; i < 3; i++) 
     {   
         city_list[i].name[strlen(city_list[i].name) -1] = 0;
         city_country[i].name[strlen(city_list[i].country) -1] = 0;
