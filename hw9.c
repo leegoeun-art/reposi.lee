@@ -11,6 +11,11 @@ Output> hI, MY NAME IS anonymous!
 #include <stdio.h>
 #include <string.h>
 
+
+
+{
+  return ch;
+}
 int main8(void)(buffer) - 1; i++)
 {
 unsigned int i;
