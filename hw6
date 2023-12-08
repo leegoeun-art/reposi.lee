@@ -1,0 +1,21 @@
+{
+  
+  
+  int ary[5];
+printf("please input five integers ");
+
+for (int i = 0; i <5; i++)
+  scanf("%d", &ary[i]);
+
+printf("\n");
+
+printf("Odd numbers: ");
+for (int i = 0; i < 5; i++)
+  if (ary[i] % 2 == 1) printf("%d", ary[1]);
+
+printf("\nEven numbers: ");
+for (int i=0; i<5; i++)
+  if (ary[i] % 2 == 0) printf("%d", ary[i]);
+
+return 0;
+}
