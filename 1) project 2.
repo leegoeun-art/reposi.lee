@@ -471,3 +471,186 @@ int main(void) {
         } else if (choice == 2) {
             decompressFile(inputFileName, out
 
+
+
+물론이죠! 다음은 조금 더 복잡한 데이터 구조와 알고리즘을 활용하는 문제입니다:
+
+문제: 그래프 탐색 - 단일 출발점 최단 경로
+주어진 방향 그래프에서 하나의 출발점에서 다른 모든 정점까지의 최단 경로를 찾는 프로그램을 작성하세요. 다음과 같은 요구사항을 만족시켜야 합니다:
+
+사용자에게 정점의 수와 간선 정보를 입력 받으세요.
+그래프는 인접 행렬 또는 인접 리스트를 사용하여 표현하세요.
+선택한 출발점에서 다른 모든 정점까지의 최단 경로를 찾아 출력하세요. (예: Dijkstra 알고리즘 사용)
+프로그램은 계속해서 다른 그래프를 입력하거나 종료할 수 있어야 합니다.
+이 문제는 그래프 알고리즘에 대한 이해와 구현력을 향상시키는 데 도움이 됩니다. Dijkstra 알고리즘은 단일 출발점에서 다른 정점까지의 최단 경로를 찾는 데 사용됩니다.
+
+#include <stdio.h>
+#include <stdlib.h>
+#include <limits.h>
+
+// 그래프의 정점을 나타내는 구조체
+typedef struct {
+    int dest;
+    int weight;
+} Edge;
+
+// 그래프의 각 정점을 나타내는 구조체
+typedef struct {
+    Edge* edges;
+    int num_edges;
+} Vertex;
+
+// 전체 그래프를 나타내는 구조체
+typedef struct {
+    Vertex* vertices;
+    int num_vertices;
+} Graph;
+
+// 우선순위 큐의 노드를 나타내는 구조체
+typedef struct {
+    int vertex;
+    int distance;
+} PQNode;
+
+// 우선순위 큐의 노드 비교 함수
+int compareNodes(const void* a, const void* b) {
+    return ((PQNode*)a)->distance - ((PQNode*)b)->distance;
+}
+
+// 우선순위 큐 구조체
+typedef struct {
+    PQNode* nodes;
+    int size;
+    int capacity;
+} PriorityQueue;
+
+// 그래프 생성 함수
+Graph createGraph(int num_vertices) {
+    Graph graph;
+    graph.num_vertices = num_vertices;
+    graph.vertices = (Vertex*)malloc(num_vertices * sizeof(Vertex));
+
+    for (int i = 0; i < num_vertices; ++i) {
+        graph.vertices[i].edges = NULL;
+        graph.vertices[i].num_edges = 0;
+    }
+
+    return graph;
+}
+
+// 그래프에 간선 추가 함수
+void addEdge(Graph* graph, int src, int dest, int weight) {
+    Edge edge = {dest, weight};
+    graph->vertices[src].edges = (Edge*)realloc(graph->vertices[src].edges, (graph->vertices[src].num_edges + 1) * sizeof(Edge));
+    graph->vertices[src].edges[graph->vertices[src].num_edges++] = edge;
+}
+
+// 우선순위 큐 생성 함수
+PriorityQueue createPriorityQueue(int capacity) {
+    PriorityQueue pq;
+    pq.nodes = (PQNode*)malloc(capacity * sizeof(PQNode));
+    pq.size = 0;
+    pq.capacity = capacity;
+
+    return pq;
+}
+
+// 우선순위 큐에 노드 삽입 함수
+void enqueue(PriorityQueue* pq, int vertex, int distance) {
+    if (pq->size == pq->capacity) {
+        pq->capacity *= 2;
+        pq->nodes = (PQNode*)realloc(pq->nodes, pq->capacity * sizeof(PQNode));
+    }
+
+    pq->nodes[pq->size].vertex = vertex;
+    pq->nodes[pq->size].distance = distance;
+    ++pq->size;
+
+    qsort(pq->nodes, pq->size, sizeof(PQNode), compareNodes);
+}
+
+// 우선순위 큐에서 노드 추출 함수
+PQNode dequeue(PriorityQueue* pq) {
+    PQNode node = pq->nodes[0];
+
+    for (int i = 1; i < pq->size; ++i) {
+        pq->nodes[i - 1] = pq->nodes[i];
+    }
+
+    --pq->size;
+
+    return node;
+}
+
+// Dijkstra 알고리즘 함수
+void dijkstra(Graph* graph, int start) {
+    int* distances = (int*)malloc(graph->num_vertices * sizeof(int));
+    PriorityQueue pq = createPriorityQueue(graph->num_vertices);
+
+    for (int i = 0; i < graph->num_vertices; ++i) {
+        distances[i] = INT_MAX;
+    }
+
+    distances[start] = 0;
+    enqueue(&pq, start, 0);
+
+    while (pq.size > 0) {
+        PQNode current = dequeue(&pq);
+
+        for (int i = 0; i < graph->vertices[current.vertex].num_edges; ++i) {
+            Edge edge = graph->vertices[current.vertex].edges[i];
+            int new_distance = distances[current.vertex] + edge.weight;
+
+            if (new_distance < distances[edge.dest]) {
+                distances[edge.dest] = new_distance;
+                enqueue(&pq, edge.dest, new_distance);
+            }
+        }
+    }
+
+    // 결과 출력
+    printf("출발점 %d에서 각 정점까지의 최단 거리:\n", start);
+    for (int i = 0; i < graph->num_vertices; ++i) {
+        if (distances[i] == INT_MAX) {
+            printf("%d: 도달 불가능\n", i);
+        } else {
+            printf("%d: %d\n", i, distances[i]);
+        }
+    }
+
+    free(distances);
+    free(pq.nodes);
+}
+
+// 메인 함수
+int main(void) {
+    int num_vertices, num_edges;
+    printf("정점의 수를 입력하세요: ");
+    scanf("%d", &num_vertices);
+
+    Graph graph = createGraph(num_vertices);
+
+    printf("간선의 수를 입력하세요: ");
+    scanf("%d", &num_edges);
+
+    for (int i = 0; i < num_edges; ++i) {
+        int src, dest, weight;
+        printf("간선 %d 정보를 입력하세요 (출발점 도착점 가중치): ", i + 1);
+        scanf("%d %d %d", &src, &dest, &weight);
+        addEdge(&graph, src, dest, weight);
+    }
+
+    int start_vertex;
+    printf("출발점을 입력하세요: ");
+    scanf("%d", &start_vertex);
+
+    dijkstra(&graph, start_vertex);
+
+    // 그래프 메모리 해제
+    for (int i = 0; i < num_vertices; ++i) {
+        free(graph.vertices[i].edges);
+    }
+    free(graph.vertices);
+
+    return 0;
+}
