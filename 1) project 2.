@@ -167,6 +167,101 @@ int main(void) {
 사용자 정의 아트를 추가하고, 선택할 수 있도록 하세요.
 이러한 추가된 조건을 충족시키면서 프로그램을 개선하세요. 이 문제는 프로그래밍 논리와 사용자 상호작용에 대한 고급 이해를 요구합니다.
 
+#include <stdio.h>
+#include <stdlib.h>
+#include <unistd.h>
+
+#define _CRT_SECURE_NO_WARNINGS
+
+// 아트 배열 및 크기 정의 (예시로 2개의 아트를 추가)
+char ascii_main[9][46] = { /* ... */ };
+char ascii_flower[13][18] = { /* ... */ };
+char ascii_custom[10][20] = { /* ... */ };
+
+// 함수 프로토타입 선언
+void displayArt(char *art[], int height, int width, int x, int y);
+void clearScreen();
+
+int main(void) {
+    int pic_num, pic_height = 0, pic_width = 0;
+    int steps_to_downwards, steps_to_rightwards;
+    char *ascii_array = NULL;
+    int y1 = 0, y2 = 0;
+
+    int direction, speed;
+    int continue_animation = 1;
+
+    while (continue_animation) {
+        // 아트 선택 및 크기 설정
+        // ... (이전 코드와 동일)
+
+        // 사용자에게 이동 방향과 속도 입력 받기
+        printf("이동 방향을 선택하세요 (1: 오른쪽, 2: 왼쪽, 3: 위쪽, 4: 아래쪽): ");
+        scanf("%d", &direction);
+        printf("이동 속도를 선택하세요 (1: 느림, 2: 보통, 3: 빠름): ");
+        scanf("%d", &speed);
+
+        // 애니메이션 효과 구현
+        while (1) {
+            clearScreen();
+            
+            // 아트 이동 및 출력
+            displayArt(ascii_array, pic_height, pic_width, y1, y2);
+
+            // 이동 방향에 따라 좌표 조정
+            switch (direction) {
+                case 1: // 오른쪽
+                    y2 += speed;
+                    break;
+                case 2: // 왼쪽
+                    y2 -= speed;
+                    break;
+                case 3: // 위쪽
+                    y1 -= speed;
+                    break;
+                case 4: // 아래쪽
+                    y1 += speed;
+                    break;
+                default:
+                    break;
+            }
+
+            usleep(50000); // 50ms 대기
+
+            // 사용자에게 계속할 지 여부 확인
+            printf("계속 애니메이션을 진행하려면 1, 종료하려면 0을 입력하세요: ");
+            scanf("%d", &continue_animation);
+            if (!continue_animation) {
+                break;
+            }
+        }
+    }
+
+    printf("프로그램을 종료합니다.\n");
+    return 0;
+}
+
+// 화면을 지우는 함수 (Linux 및 macOS에서만 동작)
+void clearScreen() {
+    printf("\033[H\033[J");
+}
+
+// 아트를 화면에 출력하는 함수
+void displayArt(char *art[], int height, int width, int x, int y) {
+    for (int i = 0; i < height; i++) {
+        for (int j = 0; j < y; j++) {
+            printf(" ");
+        }
+
+        if (i + x >= 0) {
+            printf("%.*s\n", width, art[i + x]);
+        } else {
+            printf("\n");
+        }
+    }
+}
+
+==================================================
 [자연수 a,b 사이의 구간에 대해서 홀수는 더하고
 짝수는 빼는 식을 보여준 후 결과를 출력하시오 ex) a=5,b=10인 경우, 5-6+7-8+9-10=-3]
 
@@ -180,4 +275,199 @@ a = 5
 b = 10
 result = calculate_expression(a, b)
 print(f"{a}-{b}까지의 결과: {result}")
+
+
+====================================================
+문제: 그림 비교 및 변환
+두 개의 ASCII 아트가 주어졌을 때, 두 그림이 얼마나 유사한지를 판단하고, 
+유사하다면 한 그림을 다른 그림으로 변환하는 프로그램을 작성하세요. 다음과 같은 요구사항을 만족시켜야 합니다:
+
+사용자에게 두 그림을 선택하도록 하세요.
+선택한 두 그림이 얼마나 유사한지 판단하는 기준을 정하세요. (예: 픽셀 일치, 유사도 측정 등)
+유사한 정도에 따라 두 그림을 변환하세요. (예: 픽셀 값을 조정하여 유사도 증가)
+변환된 그림을 화면에 출력하세요.
+프로그램은 계속해서 다른 그림을 선택하거나 종료할 수 있어야 합니다.
+이 문제는 두 그림 간의 비교와 변환, 사용자 상호작용 등을 다루는데 도전적일 수 있습니다. 
+이런 유형의 문제를 해결하면서 문자열 처리, 알고리즘 설계, 사용자 인터페이스 구현 등의 다양한 프로그래밍 개념을 익힐 수 있습니다.
+#include <stdio.h>
+#include <stdlib.h>
+
+#define _CRT_SECURE_NO_WARNINGS
+
+char ascii_art1[5][10] = {
+    "*********",
+    "*********",
+    "*********",
+    "*********",
+    "*********"
+};
+
+char ascii_art2[5][10] = {
+    "#########",
+    "#########",
+    "#########",
+    "#########",
+    "#########"
+};
+
+void displayArt(char *art[], int height) {
+    for (int i = 0; i < height; i++) {
+        printf("%s\n", art[i]);
+    }
+}
+
+int compareArt(char *art1[], char *art2[], int height) {
+    int similarity = 0;
+    for (int i = 0; i < height; i++) {
+        for (int j = 0; art1[i][j] != '\0'; j++) {
+            if (art1[i][j] == art2[i][j]) {
+                similarity++;
+            }
+        }
+    }
+    return similarity;
+}
+
+void transformArt(char *art[], int height) {
+    for (int i = 0; i < height; i++) {
+        for (int j = 0; art[i][j] != '\0'; j++) {
+            if (art[i][j] == '*') {
+                art[i][j] = '#';
+            }
+        }
+    }
+}
+
+int main(void) {
+    int choice;
+    int similarity;
+
+    while (1) {
+        printf("그림을 선택하세요 (1 또는 2, 0: 종료): ");
+        scanf("%d", &choice);
+
+        if (choice == 0) {
+            break;
+        }
+
+        char **selected_art = (choice == 1) ? ascii_art1 : ascii_art2;
+
+        printf("\n선택한 그림:\n");
+        displayArt(selected_art, 5);
+
+        similarity = compareArt(ascii_art1, ascii_art2, 5);
+        printf("\n그림 유사도: %d\n", similarity);
+
+        if (similarity > 0) {
+            printf("그림을 변환합니다...\n");
+            transformArt(selected_art, 5);
+            displayArt(selected_art, 5);
+        }
+    }
+
+    printf("프로그램을 종료합니다.\n");
+    return 0;
+}
+
+문제: 파일 압축 및 해제
+주어진 파일을 압축하고, 압축된 파일을 다시 해제하는 간단한 파일 압축 프로그램을 작성하세요. 
+다음과 같은 요구사항을 만족시켜야 합니다:
+
+사용자에게 파일명을 입력받아 해당 파일을 읽고, 지정된 형식으로 압축하세요.
+압축된 파일은 새로운 파일로 저장되어야 합니다.
+사용자가 압축된 파일을 선택하면 원본 파일로 해제하세요.
+프로그램은 계속해서 다른 파일을 압축하거나 해제할 수 있어야 합니다.
+파일 형식과 압축 알고리즘은 자유롭게 선택하세요 (예: 간단한 RLE 알고리즘 사용).
+이 문제는 파일 입출력, 문자열 처리, 알고리즘 디자인에 대한 이해를 검증하는 데 사용될 수 있습니다. 
+사용자 인터페이스 및 파일 시스템 상호작용도 포함됩니다
+
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+
+void compressFile(const char *inputFileName, const char *outputFileName) {
+    FILE *inputFile = fopen(inputFileName, "r");
+    FILE *outputFile = fopen(outputFileName, "w");
+
+    if (inputFile == NULL || outputFile == NULL) {
+        perror("파일 열기 오류");
+        return;
+    }
+
+    char currentChar, prevChar;
+    int count = 1;
+
+    while ((currentChar = fgetc(inputFile)) != EOF) {
+        if (currentChar == prevChar) {
+            count++;
+        } else {
+            if (count > 1) {
+                fprintf(outputFile, "%d%c", count, prevChar);
+            } else {
+                fputc(prevChar, outputFile);
+            }
+            count = 1;
+        }
+
+        prevChar = currentChar;
+    }
+
+    fclose(inputFile);
+    fclose(outputFile);
+
+    printf("파일이 압축되었습니다.\n");
+}
+
+void decompressFile(const char *inputFileName, const char *outputFileName) {
+    FILE *inputFile = fopen(inputFileName, "r");
+    FILE *outputFile = fopen(outputFileName, "w");
+
+    if (inputFile == NULL || outputFile == NULL) {
+        perror("파일 열기 오류");
+        return;
+    }
+
+    char currentChar;
+    int count = 0;
+
+    while ((currentChar = fgetc(inputFile)) != EOF) {
+        if (isdigit(currentChar)) {
+            count = count * 10 + (currentChar - '0');
+        } else {
+            for (int i = 0; i < count; i++) {
+                fputc(currentChar, outputFile);
+            }
+            count = 0;
+        }
+    }
+
+    fclose(inputFile);
+    fclose(outputFile);
+
+    printf("파일이 해제되었습니다.\n");
+}
+
+int main(void) {
+    int choice;
+    char inputFileName[256];
+    char outputFileName[256];
+
+    while (1) {
+        printf("1. 파일 압축\n2. 파일 해제\n0. 종료\n");
+        printf("원하는 작업을 선택하세요: ");
+        scanf("%d", &choice);
+
+        if (choice == 0) {
+            break;
+        }
+
+        printf("입력 파일명: ");
+        scanf("%s", inputFileName);
+        printf("출력 파일명: ");
+        scanf("%s", outputFileName);
+
+        if (choice == 1) {
+            compressFile(inputFileName, outputFileName);
+        } else if (choice == 2) {
+            decompressFile(inputFileName, out
 
