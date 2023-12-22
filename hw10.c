@@ -6,14 +6,14 @@ hw10.c 파일을 만들어 개인 github 리파지토리에 올려 주시기 바
     while(getchar()!='\n')
 #include <stdio.h>
 #include <string.h>
-#define MAX_STRING_SIZE 30 //코드할 때 MAX 써있는 거 30으로 다 바뀜 
+#define MAX_STRING_SIZE 50 //코드할 때 MAX 써있는 거 30으로 다 바뀜 
     
 typedef struct city
 {
     char name[MAX_STRING_SIZE]
     char country[MAX_STRING_SIZE]
     int population;
-}city;
+} City;
 
 int main() {
     // 도시 정보를 저장하는 구조체 배열 선언
