@@ -1,0 +1,81 @@
+#define _CRT_SECURE_NO_WARNINGS
+#include <stdio.h>
+#include "ascii_art.h"
+
+int main11(void)
+{
+    int pic_num, pic_height = 0, pic_width = 0;
+    int steps_to_downwards, steps_to_rightwards;
+    char* ascii_array = NULL;
+    int y1 = 0, y2 = 0;      //여러 변수들을 선언합니다. pic_num, pic_height, pic_width는 그림의 번호와 높이, 너비를 저장하는 변수입니다. 
+                                steps_to_downwards, steps_to_rightwards는 아래로 몇 줄, 오른쪽으로 몇 칸 이동할지를 저장하는 변수입니다. 
+                                ascii_array는 선택한 그림의 ASCII 아트를 가리키는 포인터입니다. 
+                                char* ascii_array = NULL;는 포인터 변수 ascii_array를 선언하고, 초기값으로 NULL을 할당하는 코드입니다
+                                char*: 포인터 변수의 자료형을 나타냅니다. char 포인터는 문자열이나 문자 배열을 가리키는 데 사용됩니다.
+                                ascii_array: 변수의 이름입니다. 이 변수는 ASCII 아트의 문자열을 가리킬 것입니다.
+                                = NULL: 포인터 변수를 초기화합니다. NULL은 포인터 변수가 아무것도 가리키지 않도록 하는 값으로 사용됩니다.
+                                y1과 y2는 반복문에서 사용되는 변수입니다.//
+
+    while (1)
+    {
+        printf("그림 번호 선택(1.main, 2.flower, 3.castle, 기타: 종료): ");
+        scanf("%d", &pic_num);    > 무한 루프를 실행하며 사용자에게 그림 번호를 선택하라고 입력을 받습니다. pic_num 변수에 사용자의 입력을 저장합니다.
+
+        switch (pic_num) {
+        case 1:
+            ascii_array = ascii_main[0];
+            pic_width = 46;
+            pic_height = 9;
+            break;
+
+        case 2:
+            ascii_array = ascii_flower[0];
+            pic_width = 18;
+            pic_height = 13;
+            break;
+
+        case 3:
+            ascii_array = ascii_castle[0];
+            pic_width = 57;
+            pic_height = 20;
+            break;
+
+        default:
+            printf("안녕히 가세요.\n");
+            return 0;
+           
+        }
+        printf("오른쪽으로 몇 칸 이동할까요? ");
+        scanf("%d", &steps_to_rightwards);
+
+        printf("아래로 몇 줄 이동할까요? ");
+        scanf("%d", &steps_to_downwards);
+
+        printf("선택한 그림을 해당 위치로부터 출력합니다.\n");
+        for (int y1 = 0, y2 = 0; y1 < pic_height + steps_to_downwards; y1++)    
+        
+                          > int y1 = 0, y2 = 0;: y1과 y2를 각각 0으로 초기화합니다. 이는 반복문에 진입하기 전에 초기값을 설정하는 부분입니다.
+                                y1 < pic_height + steps_to_downwards;: 반복문의 조건을 나타내며, y1이 pic_height + steps_to_downwards보다 작을 때까지 반복합니다.
+                                y1++: 각 반복이 끝날 때마다 y1을 1씩 증가시킵니다.
+        {
+            if (y1 >= steps_to_downwards)
+            {
+                for (int x = 0; x < steps_to_rightwards; x++)       
+                    printf(" ");
+
+                /*for (int x=0; x<pic_width; x++)
+                  printf("%c", *(ascii_array +(y2 * pic_width)+x));
+                printf("\n");*/
+
+                printf("%s\n", ascii_array + (y2 * pic_width));
+                y2++;
+            }
+            else printf("\n");
+        }
+        return 0;
+    }
+}
+여러 변수들을 선언합니다. pic_num, pic_height, pic_width는 그림의 번호와 높이, 너비를 저장하는 변수입니다. 
+steps_to_downwards, steps_to_rightwards는 아래로 몇 줄, 오른쪽으로 몇 칸 이동할지를 저장하는 변수입니다. 
+ascii_array는 선택한 그림의 ASCII 아트를 가리키는 포인터입니다. 
+y1과 y2는 반복문에서 사용되는 변수입니다.
